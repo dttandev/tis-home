@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductTagRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ProductCrudController
+ * Class ProductTagCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ProductCrudController extends CrudController
+class ProductTagCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class ProductCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Product::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/product');
-        CRUD::setEntityNameStrings('product', 'products');
+        CRUD::setModel(\App\Models\ProductTag::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/product-tag');
+        CRUD::setEntityNameStrings('product tag', 'product tags');
     }
 
     /**
@@ -39,8 +39,6 @@ class ProductCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name');
-        CRUD::column('status');
         CRUD::column('created_at');
         CRUD::column('updated_at');
 
@@ -60,33 +58,16 @@ class ProductCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation([
-            'name' => 'required|min:2',
-            'status' => 'required|min:2',
+            // 'name' => 'required|min:2',
         ]);
 
-        CRUD::addField([
-            'name' => 'name',
-            'type' => 'table',
-            'columns'         => [
-                'name'  => 'Name',
-                'desc'  => 'Description',
-                'price' => 'Price'
-            ],
-            'entity_singular' => 'option',
-        ]);
+        
 
-        CRUD::addField([
-            'name' => 'status',
-            'type' => 'select_from_array',
-            'options' => ['one' => 'One', 'two' => 'Two'],
-            'allows_null' => false,
-            'default' => 'one',
-        ]);
-
-        CRUD::addField([
-            'name' => 'description',
-            'type' => 'summernote'
-        ]);
+        /**
+         * Fields can be defined using the fluent syntax or array syntax:
+         * - CRUD::field('price')->type('number');
+         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         */
     }
 
     /**
