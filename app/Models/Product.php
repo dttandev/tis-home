@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use stdClass;
 
 class Product extends Model
 {
@@ -22,10 +23,11 @@ class Product extends Model
     protected $fillable = [
         'name',
         'status',
-        'description'
+        'description',
+        'product_type_id',
+        'sizes'
     ];
-    // protected $hidden = [];
-    // protected $dates = [];
+    protected $appends = ['sizes'];
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +40,11 @@ class Product extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function product_type()
+    {
+        return $this->belongsTo(ProductType::class);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -56,4 +63,36 @@ class Product extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getSizesAttribute() {
+        $objects = ProductSize::where('product_id', $this->id)->get();
+        $array = [];
+
+        foreach ($objects as $items) {
+            $obj = new stdClass;
+            $obj->id = $items->id;
+            $obj->name = $items->name;
+            $obj->description = $items->description;
+            $obj->price = $items->price;
+            $array[] = $obj;
+        }
+        
+        return json_encode($array);
+    }
+
+    public function setSizesAttribute($value) {
+        $objects = json_decode($value);
+        $array = [];
+
+        foreach ($objects as $items) {
+            $obj = new stdClass;
+            $obj->id = $items->id;
+            $obj->name = $items->name;
+            $obj->description = $items->description;
+            $obj->price = $items->price;
+            $array[] = $obj;
+        }
+        
+        return json_encode($array);
+    }
 }

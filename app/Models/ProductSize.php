@@ -16,12 +16,14 @@ class ProductSize extends Model
     */
 
     protected $table = 'product_sizes';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
+    protected $primaryKey = 'id';
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+    protected $fillable = [
+        'id',
+        'name',
+        'description',
+        'sizes'
+    ];
 
     /*
     |--------------------------------------------------------------------------

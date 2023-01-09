@@ -22,9 +22,9 @@
         <table class="table table-bordered table-striped m-b-0" ng-init="field = '#{{ $field['name'] }}'; items = {{ json_encode($items) }}; max = {{$max}}; min = {{$min}}; maxErrorTitle = '{{trans('backpack::crud.table_cant_add', ['entity' => $item_name])}}'; maxErrorMessage = '{{trans('backpack::crud.table_max_reached', ['max' => $max])}}'">
             <thead>
                 <tr>
-                    @foreach( $field['columns'] as $prop )
+                    @foreach($field['columns'] as $prop )
                     <th style="font-weight: 600!important;">
-                        {{ $prop }}
+                        {{ $prop['label'] }}
                     </th>
                     @endforeach
                     <th class="text-center"> {{-- <i class="fa fa-sort"></i> --}} </th>
@@ -33,9 +33,9 @@
             </thead>
             <tbody ui-sortable="sortableOptions" ng-model="items" class="table-striped">
                 <tr ng-repeat="item in items" class="array-row">
-                    @foreach( $field['columns'] as $prop => $label)
+                    @foreach($field['columns'] as $prop)
                     <td>
-                        <input class="form-control input-sm" type="text" ng-model="item.{{ $prop }}">
+                        <input class="form-control input-sm" type="{{ $prop['type'] ?? 'text'}}" ng-model="item.{{ $prop['name'] }}">
                     </td>
                     @endforeach
                     <td>
@@ -91,8 +91,8 @@
                     handle: '.sort-handle'
                 };
                 $scope.addItem = function(){
-                    if( $scope.max > -1 ){
-                        if( $scope.items.length < $scope.max ){
+                    if ($scope.max > -1) {
+                        if ($scope.items.length < $scope.max) {
                             var item = {};
                             $scope.items.push(item);
                         } else {
@@ -112,23 +112,23 @@
                     var index = $scope.items.indexOf(item);
                     $scope.items.splice(index, 1);
                 }
-                $scope.$watch('items', function(a, b){
-                    if( $scope.min > -1 ){
-                        while($scope.items.length < $scope.min){
+                $scope.$watch('items', function(a, b) {
+                    if ($scope.min > -1) {
+                        while ($scope.items.length < $scope.min) {
                             $scope.addItem();
                         }
                     }
-                    if( typeof $scope.items != 'undefined' && $scope.items.length ){
-                        if( typeof $scope.field != 'undefined'){
-                            if( typeof $scope.field == 'string' ){
+                    if (typeof $scope.items != 'undefined' && $scope.items.length) {
+                        if (typeof $scope.field != 'undefined') {
+                            if (typeof $scope.field == 'string') {
                                 $scope.field = $($scope.field);
                             }
-                            $scope.field.val( angular.toJson($scope.items) );
+                            $scope.field.val(angular.toJson($scope.items));
                         }
                     }
                 }, true);
-                if( $scope.min > -1 ){
-                    for(var i = 0; i < $scope.min; i++){
+                if ($scope.min > -1) {
+                    for (var i = 0; i < $scope.min; i++) {
                         $scope.addItem();
                     }
                 }

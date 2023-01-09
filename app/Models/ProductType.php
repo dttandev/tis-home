@@ -16,12 +16,9 @@ class ProductType extends Model
     */
 
     protected $table = 'product_types';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
+    protected $primaryKey = 'id';
     protected $guarded = ['id'];
     // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +31,11 @@ class ProductType extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

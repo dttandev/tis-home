@@ -39,14 +39,20 @@ class ProductTypeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text'
+        ]); 
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+        CRUD::addColumn([
+            'name' => 'created_at',
+            'type' => 'datetime'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'updated_at',
+            'type' => 'datetime'
+        ]);
     }
 
     /**
@@ -58,16 +64,18 @@ class ProductTypeCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation([
-            // 'name' => 'required|min:2',
+            'name' => 'required',
         ]);
 
-        
+        CRUD::addField([
+            'name' => 'name',
+            'type' => 'text',
+        ]);
 
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
-         */
+        CRUD::addField([
+            'name' => 'description',
+            'type' => 'textarea'
+        ]);
     }
 
     /**

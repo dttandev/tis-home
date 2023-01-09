@@ -18,8 +18,11 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('status');
             $table->longText('description')->nullable();
+            $table->unsignedBigInteger('product_type_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('product_type_id')->references('id')->on('product_types');
         });
     }
 

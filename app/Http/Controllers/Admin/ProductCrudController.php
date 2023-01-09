@@ -39,16 +39,40 @@ class ProductCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name');
-        CRUD::column('status');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text'
+        ]); 
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+        CRUD::addColumn([
+            'name' => 'name',
+            'type' => 'text'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'status',
+            'type' => 'select_from_array',
+            'options' => [
+                'active' => 'Active',
+                'inactive' => 'Inactive'
+            ],
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'product_type.name',
+            'type' => 'text',
+            'label' => 'Product Type'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'created_at',
+            'type' => 'datetime'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'updated_at',
+            'type' => 'datetime'
+        ]);
     }
 
     /**
@@ -60,32 +84,61 @@ class ProductCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation([
-            'name' => 'required|min:2',
-            'status' => 'required|min:2',
+            'name' => 'required',
+            'status' => 'required',
+            'product_type_id' => 'required',
         ]);
 
         CRUD::addField([
             'name' => 'name',
-            'type' => 'table',
-            'columns'         => [
-                'name'  => 'Name',
-                'desc'  => 'Description',
-                'price' => 'Price'
-            ],
-            'entity_singular' => 'option',
+            'type' => 'text',
+        ]);
+
+        CRUD::addField([
+            'label' => 'Product Type',
+            'name' => 'product_type_id',
+            'type' => 'select',
+            'entity' => 'product_type',
+            'model' => 'App\Models\ProductType',
+            'attribute' => 'name',
         ]);
 
         CRUD::addField([
             'name' => 'status',
             'type' => 'select_from_array',
-            'options' => ['one' => 'One', 'two' => 'Two'],
+            'options' => ['active' => 'Active', 'inactive' => 'Inactive'],
             'allows_null' => false,
-            'default' => 'one',
+            'default' => 'active',
         ]);
 
         CRUD::addField([
             'name' => 'description',
-            'type' => 'summernote'
+            'type' => 'textarea'
+        ]);
+
+        CRUD::addField([
+            'name' => 'sizes',
+            'type' => 'table',
+            'label' => 'Sizes',
+            'entity_singular' => 'size',
+            'columns' => [
+                [
+                    'name' => 'name',
+                    'type' => 'text',
+                    'label' => 'Size Name',
+                ],
+                [
+                    'name' => 'description',
+                    'type' => 'text',
+                    'label' => 'Description',
+                ],
+                [
+                    'name' => 'price',
+                    'type' => 'number',
+                    'label' => 'Price'
+                ]
+            ],
+            'min' => 1,
         ]);
     }
 
