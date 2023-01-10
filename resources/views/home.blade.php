@@ -6,12 +6,11 @@
 
         <title>Laravel</title>
 
-        <!-- Fonts -->
-
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
         <!-- Styles -->
-        <style>
-
-        </style>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        
     </head>
     <body class="p-5">
         @include('common.header')
